@@ -1,0 +1,71 @@
+// compiler reads the code and converts it to css directly. Helps with clean programming
+@import './resets';
+@import './variables';
+
+// functions-> compute and return values of a specific style
+@function weight($weight-name){
+    @return map-get($map: $font-weights , $key: $weight-name)
+};
+
+// similar to functions but used with styles. It modularizes styles.
+
+@mixin flexCenter($direction){
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: $direction;
+};
+// popular use: change themes
+@mixin theme($light-theme: true) {
+    @if $light-theme {
+        background: lighten($primary-color, 100%);
+        color: darken($text-color, 100%);
+    }
+};
+
+@mixin mobile{
+    @media (max-width: $mobile) {
+        @content;
+    }
+}
+
+body{
+    background-color: $primary-color;
+    color: $text-color;
+    
+}
+
+.main{
+    @include flexCenter(row);
+    width: 80%;
+    margin: 0 auto;
+
+    // nesting & interpolation
+    //#{&} -> triggers it to read till root class within its body
+    #{&}_paragraph1{
+        font-weight: weight(bold);
+
+        // & -> triggers it to apply hover to the direct parent class
+        &:hover{
+            color: pink;
+        }
+    }
+
+    #{&}_paragraph2{
+        //used to reuse code body with a little modification
+        @extend .main_paragraph1;
+
+        // & -> triggers it to apply hover to the direct parent class
+        &:hover{
+            color: $accent-color;
+        }
+    }
+
+    @include mobile{
+        flex-direction: column;
+    }
+}
+
+.light{
+    @include theme($light-theme: false);
+}
