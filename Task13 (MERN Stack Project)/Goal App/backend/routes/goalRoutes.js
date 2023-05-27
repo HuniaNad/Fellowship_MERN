@@ -2,10 +2,12 @@ const express = require("express")
 const router = express.Router()
 
 const { 
-    getGoals, 
+    getGoals,
+    getGoal, 
     setGoal, 
     updateGoal, 
     deleteGoal, 
+
 } = require('../controllers/goalController') 
 
 const { protect } = require('../middleware/authMiddleware')
