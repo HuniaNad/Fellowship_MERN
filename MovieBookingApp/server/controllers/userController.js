@@ -1,4 +1,5 @@
 const User = require('../models/userModel')
+const Booking = require('../models/bookingModel')
 const bcrypt = require('bcryptjs')
 const genHashPassword = require('../services/generateHashPassword')
 const generateToken = require('../services/generateToken')
@@ -122,10 +123,25 @@ const deleteUser = async (req, res, next) => {
     }
 }
 
+const getBookingsOfUser = async (req, res, next) => {
+    try{
+        const bookings = await Booking.find({ user: req.params.id})
+        if(!bookings){
+            return res.status(500).json({message: "Unexpected Error Occured"})
+        }
+
+        res.status(200).json({bookings})
+
+    }catch(err){
+        return next(err)
+    }
+}
+
 module.exports = {
     getAllUsers,
     signup,
     updateUser,
     deleteUser,
-    login
+    login,
+    getBookingsOfUser
 }
